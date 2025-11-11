@@ -41,4 +41,8 @@ view partitions, open and read text files, rename files, and delete files.
   - Folder → Opens it.
   - File → Displays its content (if a readable text file).
  
+   <img width="861" height="712" alt="image" src="https://github.com/user-attachments/assets/6b28b651-0933-47e4-ac0a-66c69bd5d36a" />
+
+
+ 
   <img width="792" height="573" alt="image" src="https://github.com/user-attachments/assets/0522e497-063f-4e50-9ba3-4b73bb7455e6" />
