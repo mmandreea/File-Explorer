@@ -1,6 +1,7 @@
 import partions.GetPartitions;
 import fileContent.FileContent;
 
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -93,7 +94,25 @@ class App extends JFrame{
 
         renameButton.addActionListener(new ActionListener(){
             @Override
-            public void actionPerformed(ActionEvent e){}
+            public void actionPerformed(ActionEvent e){
+                int row=fileTable.getSelectedRow();
+                String fileName =fileTable.getValueAt(row,0).toString();
+                String filePath=currentDir.getAbsolutePath()+File.separator+ fileName;
+                File f=new File(filePath);
+                JTextField textField=new JTextField(20);
+                JPanel p=new JPanel(new FlowLayout(FlowLayout.CENTER));
+                JLabel label=new JLabel("New name :");
+                p.setBackground(Color.LIGHT_GRAY);
+                p.add(label);
+                p.add(textField);
+
+                JOptionPane.showMessageDialog(null,p,"Rename",JOptionPane.PLAIN_MESSAGE);
+                String newFileName=textField.getText();
+                String newFilePath=currentDir.getAbsolutePath()+File.separator+ newFileName;
+                File f1=new File(newFilePath);
+                f.renameTo(f1);
+                refreshTable(currentDir);
+            }
         });
 
         /// Partitions Buttons
@@ -206,7 +225,7 @@ class App extends JFrame{
                 for(int i=0;i<files.length;i++){
                     String name=files[i].getName();
                     String type=files[i].isDirectory()?"Folder":"File";
-                    String size=files[i].isFile()?"-":String.valueOf(files[i].length());
+                    String size=files[i].isFile()?String.valueOf(files[i].length()):"-";
                     model.addRow(new Object[]{name,type,size});
                 }
             }
