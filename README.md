@@ -10,7 +10,7 @@ view partitions, open and read text files, rename files, and delete files.
 **File Viewer** - Displays the content of text files in a pop-up window.
 **Safe Deletion** - Includes confirmation prompts before deleting files.
 
-<img width="792" height="573" alt="image" src="https://github.com/user-attachments/assets/6d72a451-21b9-4936-be75-804bb87573d7" />
+<img width="797" height="537" alt="image" src="https://github.com/user-attachments/assets/bd06933e-4905-41ea-ac63-0afa89e334d6" />
 
 
 ## Project Structure
