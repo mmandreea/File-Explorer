@@ -1,6 +1,7 @@
 import partions.GetPartitions;
 import fileContent.FileContent;
 import zip.Zip;
+import unzip.Unzip;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -125,6 +126,21 @@ class App extends JFrame{
             }
 
         });
+
+        unzipButton.addActionListener(new ActionListener(){
+
+            public void actionPerformed(ActionEvent e){
+
+                int row=fileTable.getSelectedRow();
+                String fileName=fileTable.getValueAt(row, 0).toString();
+                String filePath=currentDir.getAbsolutePath()+File.separator+ fileName;
+
+                File file=new File(filePath);
+                Unzip unzipObj=new Unzip(fileName, filePath, file);
+
+            }
+
+        } );
 
         renameButton.addActionListener(new ActionListener(){
             @Override
