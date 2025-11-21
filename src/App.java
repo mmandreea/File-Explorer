@@ -1,6 +1,6 @@
 import partions.GetPartitions;
 import fileContent.FileContent;
-
+import zip.Zip;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -21,6 +21,8 @@ class App extends JFrame{
     private JButton renameButton;
     private JButton deleteButton;
     private JButton previousButton;///for the folder that is above the current folder
+    private JButton zipButton;
+    private JButton unzipButton;
 
     public App(){
         setTitle("My File Manager");
@@ -49,9 +51,17 @@ class App extends JFrame{
         renameButton.setForeground(Color.WHITE);
         previousButton=new JButton("Go Back");
         previousButton.setForeground(Color.BLACK);
+        zipButton=new JButton("ZIP");
+        zipButton.setForeground(Color.WHITE);
+        zipButton.setBackground(Color.ORANGE);
+        unzipButton=new JButton("UNZIP");
+        unzipButton.setForeground(Color.WHITE);
+        unzipButton.setBackground(Color.ORANGE);
         buttonPanel.add(deleteButton);
         buttonPanel.add(renameButton);
         buttonPanel.add(previousButton);
+        buttonPanel.add(zipButton);
+        buttonPanel.add(unzipButton);
         add(buttonPanel,BorderLayout.SOUTH);
 
         previousButton.addActionListener(new ActionListener(){
@@ -90,6 +100,30 @@ class App extends JFrame{
 
 
             }
+        });
+
+        ///  zip button
+        zipButton.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e){
+                int row=fileTable.getSelectedRow();
+                String fileName=fileTable.getValueAt(row, 0).toString();
+                String filePath=currentDir.getAbsolutePath()+File.separator+ fileName;
+
+                File file=new File(filePath);
+                Zip zipObj=new Zip(fileName, filePath, file);
+                if(file.isFile()){
+                    zipObj.ZipTheFile();
+                }
+                else
+                {
+                    zipObj.ZipTheFolder();
+                }
+                refreshTable(currentDir);
+
+            }
+
         });
 
         renameButton.addActionListener(new ActionListener(){
