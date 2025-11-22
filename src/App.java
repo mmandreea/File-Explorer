@@ -127,6 +127,7 @@ class App extends JFrame{
 
         });
 
+        ///unzip button
         unzipButton.addActionListener(new ActionListener(){
 
             public void actionPerformed(ActionEvent e){
@@ -134,9 +135,14 @@ class App extends JFrame{
                 int row=fileTable.getSelectedRow();
                 String fileName=fileTable.getValueAt(row, 0).toString();
                 String filePath=currentDir.getAbsolutePath()+File.separator+ fileName;
-
                 File file=new File(filePath);
-                Unzip unzipObj=new Unzip(fileName, filePath, file);
+                Unzip unzipObj=new Unzip(filePath);
+                if(file.isFile())
+                    unzipObj.UnzipTheFile();
+                else
+                    unzipObj.UnzipTheFolder();
+                refreshTable(currentDir);
+
 
             }
 
