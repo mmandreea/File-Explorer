@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
 
@@ -73,8 +74,77 @@ public class Unzip {
         }
     }
 
-
     public void UnzipTheFolder(){
 
+        String caleCompletaZip = this.zip;
+        File zipFile = new File(caleCompletaZip);
+        File directorDestinatie = zipFile.getParentFile();
+
+        if (directorDestinatie == null) {
+            System.err.println("Eroare: Nu s-a putut determina directorul parinte al arhivei.");
+            return;
+        }
+
+        byte buffer[] = new byte[1024];
+
+        FileInputStream fileIn = null;
+        ZipInputStream zipIn = null;
+
+        try
+        {
+            fileIn = new FileInputStream(caleCompletaZip);
+            zipIn = new ZipInputStream(fileIn);
+
+            ZipEntry entry;
+            while ((entry = zipIn.getNextEntry()) != null) {
+
+                File nouaIntrare = new File(directorDestinatie, entry.getName());
+
+                if (entry.isDirectory()) {
+                    if (!nouaIntrare.exists()) {
+                        nouaIntrare.mkdirs();
+                        System.out.println("Director creat: " + nouaIntrare.getAbsolutePath());
+                    }
+                }
+                else {
+                    File directorParinte = nouaIntrare.getParentFile();
+                    if (directorParinte != null && !directorParinte.exists()) {
+                        directorParinte.mkdirs();
+                    }
+
+                    FileOutputStream fileO = null;
+                    try {
+                        fileO = new FileOutputStream(nouaIntrare);
+                        int nBytes;
+                        while ((nBytes = zipIn.read(buffer)) != -1) {
+                            fileO.write(buffer, 0, nBytes);
+                        }
+                        System.out.println("Fisier dezarhivat: " + nouaIntrare.getAbsolutePath());
+                    }
+                    finally {
+                        if (fileO != null) {
+                            fileO.close();
+                        }
+                    }
+                }
+
+                zipIn.closeEntry();
+            }
+
+        }
+        catch (ZipException ze) {
+            System.out.println("Eroare ZIP: " + ze.toString());
+        }
+        catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        finally {
+            try {
+                if (zipIn != null) zipIn.close();
+                if (fileIn != null) fileIn.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

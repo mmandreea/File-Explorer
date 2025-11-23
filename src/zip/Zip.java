@@ -1,7 +1,6 @@
 package zip;
 
 import java.io.*;
-import java.nio.file.Path;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipOutputStream;
@@ -52,9 +51,84 @@ public class Zip {
         }
 
     }
+    /// Creez o singura data un fisier de tip zip si apelez metoda recursica addFileToZip
+    /// In metoda addFileToZip se adauga fiecare fisier copil in fiesierul Zip si daca fisierul este de fapt folder se reapeleaza metoda addFileToZip
+
     public void ZipTheFolder(){
 
+        if (!this.file.exists() || !this.file.isDirectory()){
+            System.out.println("Calea specificata nu este un director valid: " + this.absolutePath);
+            return;
+        }
+
+        String zipFilePath = this.absolutePath + ".zip";
+
+        FileOutputStream fos = null;
+        ZipOutputStream zos = null;
+
+        try {
+            fos = new FileOutputStream(zipFilePath);
+            zos = new ZipOutputStream(fos);
+
+            String rootDirName = this.file.getName();
+            addFileToZip(this.file, rootDirName, zos);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                if (zos != null) zos.close();
+                if (fos != null) fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
+    private void addFileToZip(File fileToZip, String entryName, ZipOutputStream zos) throws IOException {
 
+        if (!fileToZip.exists() || fileToZip.isHidden()) {
+            return;
+        }
+
+        if (fileToZip.isDirectory()) {
+
+            String dirEntryName = entryName;
+            if (!dirEntryName.endsWith(File.separator)) {
+                dirEntryName = dirEntryName + "/";
+            }
+
+            ZipEntry zipEntry = new ZipEntry(dirEntryName);
+            zos.putNextEntry(zipEntry);
+            zos.closeEntry();
+
+            File[] children = fileToZip.listFiles();
+            if (children != null) {
+                for (File childFile : children) {
+                    addFileToZip(childFile, dirEntryName + childFile.getName(), zos);
+                }
+            }
+            return;
+        }
+
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(fileToZip);
+
+            ZipEntry zipEntry = new ZipEntry(entryName);
+            zos.putNextEntry(zipEntry);
+
+            byte[] buffer = new byte[1024];
+            int nBytes;
+            while ((nBytes = fis.read(buffer)) > 0) {
+                zos.write(buffer, 0, nBytes);
+            }
+            zos.closeEntry();
+
+        }
+        finally {
+            if (fis != null) fis.close();
+        }
+    }
 }

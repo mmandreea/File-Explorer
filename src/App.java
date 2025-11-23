@@ -110,8 +110,7 @@ class App extends JFrame{
             public void actionPerformed(ActionEvent e){
                 int row=fileTable.getSelectedRow();
                 String fileName=fileTable.getValueAt(row, 0).toString();
-                String filePath=currentDir.getAbsolutePath()+File.separator+ fileName;
-
+                String filePath=currentDir.getAbsolutePath()+File.separator + fileName;
                 File file=new File(filePath);
                 Zip zipObj=new Zip(fileName, filePath, file);
                 if(file.isFile()){
