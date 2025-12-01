@@ -15,10 +15,10 @@ view partitions, open and read text files, rename files, and delete files.
 
 ## Project Structure
 FileManager
-  📄 App.java # Main GUI application
-  📁 partitions/
+   App.java # Main GUI application
+   partitions/
      GetPartitions.java # Handles detection and display of disk partitions
-  📁 fileContent/
+  fileContent/
      FileContent.java # Handles reading content from files
 
 
